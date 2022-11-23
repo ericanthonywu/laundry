@@ -7,12 +7,23 @@ import (
 	"net/http"
 )
 
-func errorResponse(err error, c echo.Context, context string) error {
+func errorResponse(err error, context string, httpStatus int) error {
 	message := "failed to " + context
-	fmt.Println(message+": ", err)
-	return c.JSON(http.StatusInternalServerError, Model.ErrorResponse{Message: message, Error: err})
+	if httpStatus >= 500 {
+		fmt.Println(message+": ", err)
+	}
+
+	return echo.NewHTTPError(httpStatus, Model.NewErrorResponse(message, err))
 }
 
-func JWTErrorResponse(err error, c echo.Context) error {
-	return errorResponse(err, c, "parse jwt")
+func JWTErrorResponse(err error) error {
+	return errorResponse(err, "parse jwt", http.StatusInternalServerError)
+}
+
+func DBErrorResponse(err error) error {
+	return errorResponse(err, "execute query", http.StatusInternalServerError)
+}
+
+func BadRequestResponse(message string) error {
+	return errorResponse(nil, message, http.StatusBadRequest)
 }

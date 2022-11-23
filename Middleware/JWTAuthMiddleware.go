@@ -38,13 +38,13 @@ func getToken(next echo.HandlerFunc, role string) echo.HandlerFunc {
 		})
 
 		if err != nil {
-			return Utils.JWTErrorResponse(err, c)
+			return Utils.JWTErrorResponse(err)
 		}
 
 		claims, ok := token.Claims.(jwt.MapClaims)
 
 		if !ok || !token.Valid {
-			return Utils.JWTErrorResponse(err, c)
+			return Utils.JWTErrorResponse(err)
 		}
 
 		jwtRole := claims["role"].(string)

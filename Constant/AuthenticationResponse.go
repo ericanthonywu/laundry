@@ -1,0 +1,5 @@
+package Constant
+
+const (
+	VerifyOtpSuccess = ""
+)

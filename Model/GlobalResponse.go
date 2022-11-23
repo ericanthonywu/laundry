@@ -10,6 +10,10 @@ type DefaultResponse struct {
 	Data    interface{} `json:"data"`
 }
 
+func NewErrorResponse(message string, error interface{}) *ErrorResponse {
+	return &ErrorResponse{Message: message, Error: error}
+}
+
 func NewDefaultResponse(message string, data interface{}) *DefaultResponse {
 	return &DefaultResponse{Message: message, Data: data}
 }

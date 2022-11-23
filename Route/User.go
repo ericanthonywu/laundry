@@ -10,7 +10,7 @@ func UserRoute(e *echo.Echo) {
 	api := e.Group("/user")
 
 	// for authentication route
-	api.POST("/login", User.Login)
+	api.POST("/request-otp", User.RequestOTP)
 
 	// protected route
 	api.Use(Middleware.UserMiddleware)
