@@ -19,14 +19,13 @@ func RequestOTP(c echo.Context) error {
 		return Utils.BadRequestResponse("request invalid")
 	}
 
-	canRetryAt, expiresAt, err := UserService.RequestOtpService(request)
+	expiresAt, err := UserService.RequestOtpService(request)
 	if err != nil {
 		return err
 	}
 
 	return Utils.OkResponse(c, APIResponse.RequestOtpSuccess, Model.UserRequestOTPResponse{
-		CanRetryAt: canRetryAt,
-		ExpireAt:   expiresAt,
+		ExpireAt: expiresAt,
 	})
 }
 

@@ -11,8 +11,7 @@ func (req UserRequestOTPRequest) IsValid() bool {
 }
 
 type UserRequestOTPResponse struct {
-	CanRetryAt time.Time `json:"can_retry_at"`
-	ExpireAt   time.Time `json:"expire_at"`
+	ExpireAt time.Time `json:"expire_at"`
 }
 
 type UserVerifyOTPRequest struct {
