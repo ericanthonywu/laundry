@@ -1,16 +1,18 @@
 package Model
 
-import (
-	"gorm.io/gorm"
-)
+import "time"
 
 type UserRequestOTPRequest struct {
-	gorm.DB
 	PhoneNumber string `json:"phone_number"`
 }
 
 func (req UserRequestOTPRequest) IsValid() bool {
 	return req.PhoneNumber != ""
+}
+
+type UserRequestOTPResponse struct {
+	CanRetryAt time.Time `json:"can_retry_at"`
+	ExpireAt   time.Time `json:"expire_at"`
 }
 
 type UserVerifyOTPRequest struct {

@@ -11,30 +11,52 @@ import (
 	"time"
 )
 
-func RequestOtpService(request *Model.UserRequestOTPRequest) error {
+func RequestOtpService(request *Model.UserRequestOTPRequest) (time.Time, time.Time, error) {
 	OtpRetrySec := Utils.GetEnvInt("OTP_RETRY_SECONDS")
 	OtpExpireSec := Utils.GetEnvInt("OTP_EXPIRE_SECONDS")
 
-	otp := Utils.GenerateOtpCode()
+	var otp string
+	otp = Utils.GetUserRedisOtp(request.PhoneNumber)
+
 	canRetryAt := time.Now().Local().Add(time.Second * time.Duration(OtpRetrySec))
 	expiresAt := time.Now().Local().Add(time.Second * time.Duration(OtpExpireSec))
+	if otp == "" {
+		otp = Utils.GenerateOtpCode()
 
-	Utils.SetUserRedisOtp(request.PhoneNumber, otp)
+		Utils.SetUserRedisOtp(request.PhoneNumber, otp)
 
-	if err := Lib.DB.Create(&Database.UserOtpRequest{
-		OtpCode:     otp,
-		PhoneNumber: request.PhoneNumber,
-		CanRetryAt:  canRetryAt,
-		ExpiresAt:   expiresAt,
-	}).Error; err != nil {
-		return Utils.DBErrorResponse(err)
+		if err := Lib.DB.Create(&Database.UserOtpRequest{
+			OtpCode:     otp,
+			PhoneNumber: request.PhoneNumber,
+			CanRetryAt:  canRetryAt,
+			ExpiresAt:   expiresAt,
+		}).Error; err != nil {
+			return time.Now(), time.Now(), Utils.DBErrorResponse(err)
+		}
+	} else {
+		var UserOtpRequest Database.UserOtpRequest
+		if err := Lib.DB.Model(&UserOtpRequest).
+			Select("can_retry_at").
+			Take(&UserOtpRequest).Error; err != nil {
+			if Utils.IsDBNotFound(err) {
+				Utils.DelUserRedisOtp(request.PhoneNumber)
+			}
+			panic(err)
+		}
+		_, min, sec := time.Now().Clock()
+		_, userMin, userSec := UserOtpRequest.CanRetryAt.Clock()
+
+		fmt.Println(min, sec, userMin, userSec)
+		if time.Now().After(UserOtpRequest.CanRetryAt) {
+			return time.Now(), time.Now(), Utils.BadRequestResponse(APIResponse.RequestOtpCanRetryAt)
+		}
 	}
 
 	Lib.SendSMS(request.PhoneNumber,
 		fmt.Sprintf(Constant.RequestOTP, otp, OtpExpireSec/60),
 	)
 
-	return nil
+	return canRetryAt, expiresAt, nil
 }
 
 func VerifyOTP(request *Model.UserVerifyOTPRequest) (string, error) {
