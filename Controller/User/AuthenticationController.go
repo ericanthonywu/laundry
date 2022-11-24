@@ -2,11 +2,10 @@ package User
 
 import (
 	"github.com/labstack/echo/v4"
-	"laundry/Constant"
+	"laundry/Constant/APIResponse"
 	"laundry/Model"
 	"laundry/Services/UserService"
 	"laundry/Utils"
-	"net/http"
 )
 
 func RequestOTP(c echo.Context) error {
@@ -24,12 +23,7 @@ func RequestOTP(c echo.Context) error {
 		return err
 	}
 
-	return c.JSON(http.StatusOK,
-		Model.NewDefaultResponse(
-			Constant.RequestOtpSuccess,
-			nil,
-		),
-	)
+	return Utils.OkResponse(c, APIResponse.RequestOtpSuccess, nil)
 }
 
 func VerifyOTP(c echo.Context) error {
@@ -48,10 +42,5 @@ func VerifyOTP(c echo.Context) error {
 		return err
 	}
 
-	return c.JSON(http.StatusOK,
-		Model.NewDefaultResponse(
-			Constant.VerifyOtpSuccess,
-			Model.UserVerifyOTPResponse{Token: token},
-		),
-	)
+	return Utils.OkResponse(c, APIResponse.VerifyOtpSuccess, Model.UserVerifyOTPResponse{Token: token})
 }

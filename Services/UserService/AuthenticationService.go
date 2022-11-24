@@ -3,6 +3,7 @@ package UserService
 import (
 	"fmt"
 	"laundry/Constant"
+	"laundry/Constant/APIResponse"
 	"laundry/Lib"
 	"laundry/Model"
 	"laundry/Model/Database"
@@ -40,11 +41,11 @@ func VerifyOTP(request *Model.UserVerifyOTPRequest) (string, error) {
 	otp := Utils.GetUserRedisOtp(request.PhoneNumber)
 
 	if otp == "" {
-		return "", Utils.BadRequestResponse(Constant.VerifyOtpBadRequest)
+		return "", Utils.BadRequestResponse(APIResponse.VerifyOtpBadRequest)
 	}
 
 	if otp != request.OtpCode {
-		return "", Utils.BadRequestResponse(Constant.VerifyOtpWrongOtp)
+		return "", Utils.BadRequestResponse(APIResponse.VerifyOtpWrongOtp)
 	}
 
 	defer Utils.DelUserRedisOtp(request.PhoneNumber)

@@ -1,4 +1,4 @@
-package Constant
+package APIResponse
 
 const (
 	RequestOtpSuccess   = "Success! Please verify your phone number by entering the otp code sent to your number"

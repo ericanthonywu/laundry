@@ -3,6 +3,7 @@ package Utils
 import (
 	"fmt"
 	"github.com/labstack/echo/v4"
+	"laundry/Model"
 	"net/http"
 )
 
@@ -26,4 +27,8 @@ func DBErrorResponse(err error) error {
 
 func BadRequestResponse(message string) error {
 	return errorResponse(nil, message, http.StatusBadRequest)
+}
+
+func OkResponse(c echo.Context, message string, data interface{}) error {
+	return c.JSON(http.StatusOK, Model.NewDefaultResponse(message, data))
 }
