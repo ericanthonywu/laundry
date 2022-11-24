@@ -24,15 +24,16 @@ func httpHandler(err error, c echo.Context) {
 	case "not found":
 		code = http.StatusNotFound
 		break
-	case "sql: no rows in result set":
+	case "400 Bad Request":
 		code = http.StatusBadRequest
-		message = "data not found"
-		break
-	default:
-		code = http.StatusInternalServerError
+		message = "bad request"
 	}
 
 	if c.JSON(code, Model.ErrorResponse{Message: message}) != nil {
 		fmt.Println(err)
 	}
+}
+
+func notFoundError(c echo.Context) error {
+	return c.JSON(http.StatusNotFound, Model.NewErrorResponse("not found", nil))
 }

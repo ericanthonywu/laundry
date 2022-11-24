@@ -11,8 +11,8 @@ func UserRoute(e *echo.Echo) {
 
 	// for authentication route
 	api.POST("/request-otp", User.RequestOTP)
+	api.POST("/verify-otp", User.VerifyOTP)
 
 	// protected route
-	api.Use(Middleware.UserMiddleware)
-	api.GET("/getUserData", User.GetProfile)
+	api.GET("/getUserData", User.GetProfile, Middleware.UserMiddleware)
 }

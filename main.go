@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
-	"laundry/Config"
+	"laundry/Lib"
 	"laundry/Middleware"
 	"laundry/Model/Database"
 	"laundry/Route"
@@ -17,8 +17,10 @@ func main() {
 		panic(err)
 	}
 
+	Lib.InitAll()
+
 	// run migration
-	err := Config.Db().AutoMigrate(
+	err := Lib.DB.AutoMigrate(
 		&Database.User{},
 		&Database.Laundry{},
 		&Database.UserOtpRequest{},

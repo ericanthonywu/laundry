@@ -2,6 +2,8 @@ package Utils
 
 import (
 	"crypto/rand"
+	"errors"
+	"gorm.io/gorm"
 	"io"
 	"os"
 	"strconv"
@@ -32,4 +34,8 @@ func GenerateOtpCode() string {
 		b[i] = table[int(b[i])%len(table)]
 	}
 	return string(b)
+}
+
+func IsDBNotFound(err error) bool {
+	return errors.Is(err, gorm.ErrRecordNotFound)
 }

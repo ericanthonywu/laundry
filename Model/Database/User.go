@@ -7,16 +7,16 @@ import (
 
 type User struct {
 	gorm.Model
-	Name         string
+	Name         string `gorm:"default:null"`
 	PhoneNumber  string
-	EmailAddress string
-	Address      string
-	Birthdate    time.Time
-	gender       string
-	LastLoginAt  time.Time
-	lat          float64
-	long         float64
-	Coin         uint64
+	EmailAddress string    `gorm:"default:null"`
+	Address      string    `gorm:"default:null"`
+	Birthdate    time.Time `gorm:"default:null"`
+	gender       string    `gorm:"default:null"`
+	LastLoginAt  time.Time `gorm:"default:null"`
+	lat          float64   `gorm:"default:null"`
+	long         float64   `gorm:"default:null"`
+	Coin         uint64    `gorm:"default:null"`
 }
 
 func (User) TableName() string {

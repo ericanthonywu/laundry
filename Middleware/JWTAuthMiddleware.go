@@ -23,7 +23,7 @@ func getToken(next echo.HandlerFunc, role string) echo.HandlerFunc {
 			return c.JSON(http.StatusInternalServerError, Model.ErrorResponse{Message: "token is required"})
 		}
 
-		err, secretToken, identifier := Utils.GenerateSecretTokenAndIdentifier(c, role)
+		err, secretToken, identifier := Utils.GenerateSecretTokenAndIdentifier(role)
 
 		if err != nil {
 			return err
@@ -31,7 +31,7 @@ func getToken(next echo.HandlerFunc, role string) echo.HandlerFunc {
 
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-				return c.JSON(http.StatusInternalServerError, Model.ErrorResponse{Message: "failed to parse jwt, check log"}), fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+				return Utils.JWTErrorResponse(err), fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 			}
 
 			return []byte(secretToken), nil
@@ -47,10 +47,12 @@ func getToken(next echo.HandlerFunc, role string) echo.HandlerFunc {
 			return Utils.JWTErrorResponse(err)
 		}
 
-		jwtRole := claims["role"].(string)
+		jwtRole := claims[Constant.UserClaimsRole].(string)
+
+		Utils.SetJwtClaims(c, claims[Constant.UserClaimsId].(string), jwtRole)
 
 		if jwtRole != identifier {
-			return c.JSON(http.StatusBadRequest, Model.ErrorResponse{Message: "role invalid"})
+			return Utils.BadRequestResponse("role invalid")
 		}
 
 		return next(c)

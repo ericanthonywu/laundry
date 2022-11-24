@@ -10,4 +10,5 @@ func Init(e *echo.Echo) {
 	corsMiddleware(e)
 
 	e.HTTPErrorHandler = httpHandler
+	echo.NotFoundHandler = notFoundError
 }

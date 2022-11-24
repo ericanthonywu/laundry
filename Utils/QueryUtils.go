@@ -1,14 +1,14 @@
 package Utils
 
 import (
-	"laundry/Config"
+	"laundry/Lib"
 	"laundry/Model/Database"
 )
 
 func CheckUserPhoneNumberExists(phoneNumber string) (bool, error) {
 	var userExists bool
 
-	err := Config.Db().
+	err := Lib.DB.
 		Model(&Database.User{}).
 		Select("1").
 		Where("phone_number", phoneNumber).

@@ -3,17 +3,17 @@ package Utils
 import (
 	"fmt"
 	"github.com/labstack/echo/v4"
-	"laundry/Model"
 	"net/http"
 )
 
 func errorResponse(err error, context string, httpStatus int) error {
-	message := "failed to " + context
+	message := context
 	if httpStatus >= 500 {
+		message = "failed to " + message
 		fmt.Println(message+": ", err)
 	}
 
-	return echo.NewHTTPError(httpStatus, Model.NewErrorResponse(message, err))
+	return echo.NewHTTPError(httpStatus, message)
 }
 
 func JWTErrorResponse(err error) error {
