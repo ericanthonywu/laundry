@@ -36,10 +36,12 @@ func SetJwtClaims(c echo.Context, id string, role string) {
 	c.Set(Constant.UserClaimsRole, role)
 }
 
-func GetJwtClaims(c echo.Context) (string, string) {
+func GetJwtClaims(c echo.Context) (uint, string) {
 	userId := fmt.Sprintf("%v", c.Get(Constant.UserClaimsId))
 	userRole := fmt.Sprintf("%v", c.Get(Constant.UserClaimsRole))
-	return userId, userRole
+
+	uintId, _ := strconv.ParseUint(userId, 10, 64)
+	return uint(uintId), userRole
 }
 
 func GenerateJwtToken(id uint, role string) (string, error) {

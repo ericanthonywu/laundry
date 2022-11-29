@@ -24,7 +24,7 @@ func RequestOTP(c echo.Context) error {
 		return err
 	}
 
-	return Utils.OkResponse(c, APIResponse.RequestOtpSuccess, Model.UserRequestOTPResponse{
+	return Utils.OkResponseMessage(c, APIResponse.RequestOtpSuccess, Model.UserRequestOTPResponse{
 		ExpireAt: expiresAt,
 	})
 }
@@ -45,5 +45,5 @@ func VerifyOTP(c echo.Context) error {
 		return err
 	}
 
-	return Utils.OkResponse(c, APIResponse.VerifyOtpSuccess, Model.UserVerifyOTPResponse{Token: token})
+	return Utils.OkResponseMessage(c, APIResponse.VerifyOtpSuccess, Model.UserVerifyOTPResponse{Token: token})
 }

@@ -11,10 +11,14 @@ import (
 )
 
 func UserMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
-	return getToken(next, Constant.User)
+	return getToken(&next, &Constant.User)
 }
 
-func getToken(next echo.HandlerFunc, role string) echo.HandlerFunc {
+func AdminMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
+	return getToken(&next, &Constant.Admin)
+}
+
+func getToken(next *echo.HandlerFunc, role *string) echo.HandlerFunc {
 	return func(c echo.Context) error {
 
 		tokenString := c.Request().Header.Get("token")

@@ -15,4 +15,5 @@ func UserRoute(e *echo.Echo) {
 
 	// protected route
 	api.GET("/getUserData", User.GetProfile, Middleware.UserMiddleware)
+	api.PATCH("/updateProfileUser", User.UpdateProfile, Middleware.UserMiddleware)
 }

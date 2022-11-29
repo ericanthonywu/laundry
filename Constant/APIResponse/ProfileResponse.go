@@ -1,5 +1,5 @@
 package APIResponse
 
 const (
-	GetProfile = "user profile data"
+	DefaultMessageResponse = "success"
 )
