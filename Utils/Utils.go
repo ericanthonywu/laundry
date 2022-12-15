@@ -9,10 +9,6 @@ import (
 	"strconv"
 )
 
-func GetEnv(key string) string {
-	return os.Getenv(key)
-}
-
 func GetEnvInt(key string) int {
 	value, err := strconv.Atoi(os.Getenv(key))
 	if err != nil {

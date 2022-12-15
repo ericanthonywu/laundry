@@ -7,7 +7,7 @@ import (
 	"laundry/Middleware"
 	"laundry/Model/Database"
 	"laundry/Route"
-	"laundry/Utils"
+	"os"
 )
 
 func main() {
@@ -32,5 +32,5 @@ func main() {
 	Middleware.Init(e)
 	Route.Init(e)
 
-	e.Logger.Fatal(e.Start(":" + Utils.GetEnv("PORT")))
+	e.Logger.Fatal(e.Start(":" + os.Getenv("PORT")))
 }

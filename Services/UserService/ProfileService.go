@@ -4,12 +4,13 @@ import (
 	"laundry/Lib"
 	"laundry/Model"
 	"laundry/Model/Database"
+	"laundry/Utils"
 )
 
-func GetProfile(id uint) Model.UserProfileResponse {
+func GetProfile(id uint) Model.UpdateProfile {
 	var user Database.User
 	user.ID = id
-	var userProfileResponse = Model.UserProfileResponse{}
+	var userProfileResponse = Model.UpdateProfile{}
 	if err := Lib.DB.
 		Model(&user).
 		Where(&user).
@@ -18,12 +19,35 @@ func GetProfile(id uint) Model.UserProfileResponse {
 		Error; err != nil {
 		panic(err)
 	}
-	userProfileResponse.ID = id
+
 	return userProfileResponse
 }
 
+func GetUserCoin(id uint) uint64 {
+	var user Database.User
+	var coin uint64
+	user.ID = id
+
+	data, existValue := Utils.GetUserCoinRedis(id)
+
+	if !existValue {
+		if err := Lib.DB.
+			Model(&user).
+			Where(&user).
+			Select("coin").
+			Take(&coin).
+			Error; err != nil {
+			panic(err)
+		}
+	} else {
+		coin = data
+	}
+
+	return coin
+}
+
 func UpdateProfile(user *Database.User) {
-	if err := Lib.DB.Model(&user).Updates(user).Where("id = ?", user.ID); err != nil {
+	if err := Lib.DB.Model(&user).Updates(user).Where("id = ?", user.ID).Error; err != nil {
 		panic(err)
 	}
 }

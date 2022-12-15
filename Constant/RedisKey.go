@@ -1,5 +1,6 @@
 package Constant
 
 const (
-	UserOtpRedisKey = "user-otp"
+	UserOtpRedisKey  = "user-otp"
+	UserCoinRedisKey = "user-coin"
 )

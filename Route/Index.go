@@ -5,8 +5,8 @@ import (
 )
 
 func Init(e *echo.Echo) {
-	IndexRoute(e)
-	UserRoute(e)
+	go IndexRoute(e)
+	go UserRoute(e)
 }
 
 func IndexRoute(e *echo.Echo) {

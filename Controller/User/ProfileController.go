@@ -10,15 +10,14 @@ import (
 
 func GetProfile(c echo.Context) error {
 	id, _ := Utils.GetJwtClaims(c)
-	profileResponse := UserService.GetProfile(id)
 
-	return Utils.OkResponse(c, profileResponse)
+	return Utils.OkResponse(c, UserService.GetProfile(id))
 }
 
 func UpdateProfile(c echo.Context) error {
-	request := new(Model.UpdateProfileRequest)
+	request := new(Model.UpdateProfile)
 
-	if err := c.Bind(request); err != nil {
+	if err := c.Bind(request); err != nil || !request.IsValid() {
 		return Utils.BadRequestResponse("failed to bind request")
 	}
 
@@ -35,4 +34,10 @@ func UpdateProfile(c echo.Context) error {
 	UserService.UpdateProfile(user)
 
 	return Utils.OkResponse(c, nil)
+}
+
+func GetUserCoin(c echo.Context) error {
+	id, _ := Utils.GetJwtClaims(c)
+
+	return Utils.OkResponse(c, UserService.GetUserCoin(id))
 }

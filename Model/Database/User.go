@@ -16,7 +16,7 @@ type User struct {
 	LastLoginAt  time.Time `gorm:"default:null"`
 	lat          float64   `gorm:"default:null"`
 	long         float64   `gorm:"default:null"`
-	Coin         uint64    `gorm:"default:null"`
+	Coin         uint64    `gorm:"default:0"`
 }
 
 func (User) TableName() string {

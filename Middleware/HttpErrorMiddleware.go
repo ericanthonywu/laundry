@@ -29,7 +29,7 @@ func httpHandler(err error, c echo.Context) {
 		message = "bad request"
 	}
 
-	if c.JSON(code, Model.ErrorResponse{Message: message}) != nil {
+	if c.JSON(code, Model.NewErrorResponse(message, nil)) != nil {
 		fmt.Println(err)
 	}
 }

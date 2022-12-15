@@ -11,14 +11,14 @@ import (
 )
 
 func UserMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
-	return getToken(&next, &Constant.User)
+	return getToken(next, Constant.User)
 }
 
 func AdminMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
-	return getToken(&next, &Constant.Admin)
+	return getToken(next, Constant.Admin)
 }
 
-func getToken(next *echo.HandlerFunc, role *string) echo.HandlerFunc {
+func getToken(next echo.HandlerFunc, role string) echo.HandlerFunc {
 	return func(c echo.Context) error {
 
 		tokenString := c.Request().Header.Get("token")
@@ -35,7 +35,7 @@ func getToken(next *echo.HandlerFunc, role *string) echo.HandlerFunc {
 
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-				return Utils.JWTErrorResponse(err), fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+				return Utils.JWTErrorResponse(err), fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 			}
 
 			return []byte(secretToken), nil
