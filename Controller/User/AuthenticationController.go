@@ -12,11 +12,11 @@ func RequestOTP(c echo.Context) error {
 	request := new(Model.UserRequestOTPRequest)
 
 	if err := c.Bind(request); err != nil {
-		return Utils.BadRequestResponse("failed to bind request")
+		return Utils.BadRequestResponseWithMessage("failed to bind request")
 	}
 
 	if !request.IsValid() {
-		return Utils.BadRequestResponse("request invalid")
+		return Utils.BadRequestResponse()
 	}
 
 	expiresAt, err := UserService.RequestOtpService(request)
@@ -33,11 +33,11 @@ func VerifyOTP(c echo.Context) error {
 	request := new(Model.UserVerifyOTPRequest)
 
 	if err := c.Bind(request); err != nil {
-		return Utils.BadRequestResponse("failed to bind request")
+		return Utils.BadRequestResponseWithMessage("failed to bind request")
 	}
 
 	if !request.IsValid() {
-		return Utils.BadRequestResponse("bad request")
+		return Utils.BadRequestResponse()
 	}
 
 	token, err := UserService.VerifyOTP(request)

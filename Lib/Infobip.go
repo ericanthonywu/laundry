@@ -24,7 +24,7 @@ func SendSMS(phoneNumber string, text string) {
 		Execute()
 
 	if err != nil {
-		panic(err)
+		//panic(err)
 		apiErr, isApiErr := err.(infobip.GenericOpenAPIError)
 		if isApiErr {
 			ibErr, isIbErr := apiErr.Model().(infobip.SmsApiException)

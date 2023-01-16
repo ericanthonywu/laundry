@@ -17,12 +17,12 @@ func RequestOtpService(request *Model.UserRequestOTPRequest) (time.Time, error) 
 	_, valueExists := Utils.GetUserRedisOtp(request.PhoneNumber)
 
 	if !valueExists {
-		return time.Now(), Utils.BadRequestResponse(APIResponse.RequestOtpCanRetryAt)
+		return time.Now(), Utils.BadRequestResponseWithMessage(APIResponse.RequestOtpCanRetryAt)
 	}
 
 	expiresAt := time.Now().Local().Add(time.Second * time.Duration(OtpExpireSec))
 	otp := Utils.GenerateOtpCode()
-
+	
 	go Utils.SetUserRedisOtp(request.PhoneNumber, otp)
 
 	if err := Lib.DB.Create(&Database.UserOtpRequest{
@@ -44,11 +44,11 @@ func VerifyOTP(request *Model.UserVerifyOTPRequest) (string, error) {
 	otp, valueExists := Utils.GetUserRedisOtp(request.PhoneNumber)
 
 	if !valueExists {
-		return "", Utils.BadRequestResponse(APIResponse.VerifyOtpBadRequest)
+		return "", Utils.BadRequestResponseWithMessage(APIResponse.VerifyOtpBadRequest)
 	}
 
 	if otp != request.OtpCode {
-		return "", Utils.BadRequestResponse(APIResponse.VerifyOtpWrongOtp)
+		return "", Utils.BadRequestResponseWithMessage(APIResponse.VerifyOtpWrongOtp)
 	}
 
 	defer Utils.DelUserRedisOtp(request.PhoneNumber)

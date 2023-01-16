@@ -26,8 +26,12 @@ func DBErrorResponse(err error) error {
 	return errorResponse(err, "execute query", http.StatusInternalServerError)
 }
 
-func BadRequestResponse(message string) error {
+func BadRequestResponseWithMessage(message string) error {
 	return errorResponse(nil, message, http.StatusBadRequest)
+}
+
+func BadRequestResponse() error {
+	return errorResponse(nil, "bad request", http.StatusBadRequest)
 }
 
 func OkResponseMessage(c echo.Context, message string, data interface{}) error {

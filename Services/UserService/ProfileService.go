@@ -25,7 +25,6 @@ func GetProfile(id uint) Model.UpdateProfile {
 
 func GetUserCoin(id uint) uint64 {
 	var user Database.User
-	var coin uint64
 	user.ID = id
 
 	data, existValue := Utils.GetUserCoinRedis(id)
@@ -35,15 +34,13 @@ func GetUserCoin(id uint) uint64 {
 			Model(&user).
 			Where(&user).
 			Select("coin").
-			Take(&coin).
+			Take(&data).
 			Error; err != nil {
 			panic(err)
 		}
-	} else {
-		coin = data
 	}
 
-	return coin
+	return data
 }
 
 func UpdateProfile(user *Database.User) {

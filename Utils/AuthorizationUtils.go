@@ -21,11 +21,11 @@ func GenerateSecretTokenAndIdentifier(role string) (error, string, string) {
 		secretToken = os.Getenv("JWTADMINSECRETTOKEN")
 		identifier = os.Getenv("JWTADMINIDENTIFIER")
 	default:
-		return BadRequestResponse("role not found"), "", ""
+		return BadRequestResponseWithMessage("role not found"), "", ""
 	}
 
 	if secretToken == "" || identifier == "" {
-		return BadRequestResponse("secret token or identifier is empty"), "", ""
+		return BadRequestResponseWithMessage("secret token or identifier is empty"), "", ""
 	}
 
 	return nil, secretToken, identifier

@@ -18,7 +18,7 @@ func UpdateProfile(c echo.Context) error {
 	request := new(Model.UpdateProfile)
 
 	if err := c.Bind(request); err != nil || !request.IsValid() {
-		return Utils.BadRequestResponse("failed to bind request")
+		return Utils.BadRequestResponseWithMessage("failed to bind request")
 	}
 
 	id, _ := Utils.GetJwtClaims(c)

@@ -56,7 +56,7 @@ func getToken(next echo.HandlerFunc, role string) echo.HandlerFunc {
 		Utils.SetJwtClaims(c, claims[Constant.UserClaimsId].(string), jwtRole)
 
 		if jwtRole != identifier {
-			return Utils.BadRequestResponse("role invalid")
+			return Utils.BadRequestResponseWithMessage("role invalid")
 		}
 
 		return next(c)

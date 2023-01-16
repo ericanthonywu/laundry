@@ -1,7 +1,6 @@
 package Middleware
 
 import (
-	"fmt"
 	"github.com/labstack/echo/v4"
 	"laundry/Model"
 	"net/http"
@@ -30,7 +29,7 @@ func httpHandler(err error, c echo.Context) {
 	}
 
 	if c.JSON(code, Model.NewErrorResponse(message, nil)) != nil {
-		fmt.Println(err)
+		panic(err)
 	}
 }
 

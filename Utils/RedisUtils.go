@@ -29,7 +29,7 @@ func DelUserRedisOtp(phoneNumber string) {
 }
 
 func SetUserCoinRedis(coin uint, id uint) {
-	Lib.RDBSet(generateUserCoinKey(id), strconv.Itoa(int(coin)), 0)
+	Lib.RDBSet(generateUserCoinKey(id), coin, 0)
 }
 
 func GetUserCoinRedis(id uint) (uint64, bool) {
