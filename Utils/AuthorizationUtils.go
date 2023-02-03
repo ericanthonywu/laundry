@@ -1,7 +1,6 @@
 package Utils
 
 import (
-	"fmt"
 	"github.com/golang-jwt/jwt"
 	"github.com/labstack/echo/v4"
 	"laundry/Constant"
@@ -37,11 +36,7 @@ func SetJwtClaims(c echo.Context, id string, role string) {
 }
 
 func GetJwtClaims(c echo.Context) (uint, string) {
-	userId := fmt.Sprintf("%v", c.Get(Constant.UserClaimsId))
-	userRole := fmt.Sprintf("%v", c.Get(Constant.UserClaimsRole))
-
-	uintId, _ := strconv.ParseUint(userId, 10, 64)
-	return uint(uintId), userRole
+	return c.Get(Constant.UserClaimsId).(uint), c.Get(Constant.UserClaimsRole).(string)
 }
 
 func GenerateJwtToken(id uint, role string) (string, error) {
@@ -58,7 +53,7 @@ func GenerateJwtToken(id uint, role string) (string, error) {
 	t, err := token.SignedString([]byte(secretToken))
 
 	if err != nil {
-		panic(err)
+		return "", err
 	}
 	return t, nil
 }

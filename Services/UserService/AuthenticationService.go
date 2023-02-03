@@ -22,7 +22,7 @@ func RequestOtpService(request *Model.UserRequestOTPRequest) (time.Time, error) 
 
 	expiresAt := time.Now().Local().Add(time.Second * time.Duration(OtpExpireSec))
 	otp := Utils.GenerateOtpCode()
-	
+
 	go Utils.SetUserRedisOtp(request.PhoneNumber, otp)
 
 	if err := Lib.DB.Create(&Database.UserOtpRequest{
@@ -63,7 +63,7 @@ func VerifyOTP(request *Model.UserVerifyOTPRequest) (string, error) {
 			err = Lib.DB.Create(&userData).Error
 		}
 		if err != nil {
-			panic(err)
+			return "", Utils.DBErrorResponse(err)
 		}
 	}
 

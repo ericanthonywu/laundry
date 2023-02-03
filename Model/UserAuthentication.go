@@ -20,7 +20,7 @@ type UserVerifyOTPRequest struct {
 }
 
 func (req UserVerifyOTPRequest) IsValid() bool {
-	return req.PhoneNumber != "" || req.OtpCode != ""
+	return req.PhoneNumber != "" || req.OtpCode != "" || len(req.OtpCode) == 6
 }
 
 type UserVerifyOTPResponse struct {

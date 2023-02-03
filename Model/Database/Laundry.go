@@ -12,5 +12,5 @@ type Laundry struct {
 }
 
 func (Laundry) TableName() string {
-	return "laundry"
+	return "laundry_merchant"
 }
